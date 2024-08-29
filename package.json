@@ -1,0 +1,13 @@
+{
+  "name": "olimp-games",
+  "version": "1.0.0",
+  "description": "basketball-tournament",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Newbluewood",
+  "license": "ISC"
+}
