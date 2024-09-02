@@ -127,9 +127,3 @@ console.log("\n")
 
 
 console.log("\n // RASPORED UTAKMICA // ")
-
-
-function KnockOutPhaseMatches(){
-let quarterFinalsMatches = []
-
-}
