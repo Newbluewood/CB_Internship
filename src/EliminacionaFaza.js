@@ -16,31 +16,77 @@ function shuffleArray(array) {
     }
   }
   
-  function haveTeamsMetBefore(team1, team2, matches) {
-    return matches.some(match => 
-      (match.home === team1 && match.Opponent === team2) || 
-      (match.home === team2 && match.Opponent === team1)
-    );
+function haveTeamsMetBefore(team1, team2, matches) {
+  return matches.some(match => 
+    (match.home === team1 && match.Opponent === team2) || 
+    (match.home === team2 && match.Opponent === team1)
+  );
+ }
+  
+function createQuarterfinals(hats, matches) {
+  let hatD = [...hats.HatD];
+  let hatE = [...hats.HatE];
+  let hatF = [...hats.HatF];
+  let hatG = [...hats.HatG];
+  
+  shuffleArray(hatD);
+  shuffleArray(hatE);
+  shuffleArray(hatF);
+  shuffleArray(hatG);
+  
+  
+  
+  // Formiranje parova četvrtfinala
+
+  let quarterfinals = [];
+
+  //- IZMENJEN DEO KODA NAKON PRIMECENE GRESKE
+
+  // Fungcie za proveru uslova da li su se paroovi sastajali u grupi i kreiranje parova cetvrtfinala
+  function canTeamsPlay(team1, team2) {
+    return team1.group !== team2.group && !haveTeamsMetBefore(team1.ISOCode, team2.ISOCode, matches);
   }
   
-  function createQuarterfinals(hats, matches) {
-    let hatD = [...hats.HatD];
-    let hatE = [...hats.HatE];
-    let hatF = [...hats.HatF];
-    let hatG = [...hats.HatG];
+  function createQuarterfinals(hat1, hat2, matches) {
+    let attempts = 0;
+    let validPairFound = false;
+    
+      while (attempts < 3 && !validPairFound) {
+        let pair1 = null;
+        let pair2 = null;
+    
+          // Prvi pokušaj
+          if (canTeamsPlay(hat1[0], hat2[0]) && canTeamsPlay(hat1[1], hat2[1])) {
+              pair1 = { team1: hat1[0], team2: hat2[0] };
+              pair2 = { team1: hat1[1], team2: hat2[1] };
+              validPairFound = true;
+          }
+          // Drugi pokušaj
+          else if (canTeamsPlay(hat1[0], hat2[1]) && canTeamsPlay(hat1[1], hat2[0])) {
+              pair1 = { team1: hat1[0], team2: hat2[1] };
+              pair2 = { team1: hat1[1], team2: hat2[0] };
+              validPairFound = true;
+          }
+    
+          if (validPairFound) {
+              quarterfinals.push(pair1);
+              quarterfinals.push(pair2);
+          } else {
+              attempts++;
+          }
+        }
+  }
   
-    shuffleArray(hatD);
-    shuffleArray(hatE);
-    shuffleArray(hatF);
-    shuffleArray(hatG);
+  // Provi za hatD i hatG
+  createQuarterfinals(hatD, hatG, matches);
   
-  
-  
-    // Formiranje parova četvrtfinala
+  // Parovi za hatE i hatF
+  createQuarterfinals(hatE, hatF, matches);
 
-    let quarterfinals = [];
 
-    for (let i = 0; i < hatD.length; i++) {
+  //- IZBACEN DEO KODA NAKON PRIMECENE GRESKE
+
+   /* for (let i = 0; i < hatD.length; i++) {
       let teamD = hatD[i];
       let teamG = hatG.find(team => team.group !== teamD.group && !haveTeamsMetBefore(teamD.ISOCode, team.ISOCode, matches));
       
@@ -57,13 +103,19 @@ function shuffleArray(array) {
         quarterfinals.push({ team1: teamE, team2: teamF });
         hatF = hatF.filter(team => team !== teamF);
       }
-    }
+    }*/
 
     console.log(" * Parovi CETVRTFINALA : \n\n")
     for(let parovi of quarterfinals){
       console.log( " - -- - ", parovi.team1.Team, ",", parovi.team2.Team )
    }
    console.log("\n\n")
+   
+   // - AKO SLUCAJNO NEMA PAROVA JAVLJA GRESKU
+   if(quarterfinals.length<4){
+    console.log( "\t\t\t\t GRESKA: /// !!!! Nema dovoljno parova za formiranje cetvrtfinala ! !!! //// GRESKA \n\t PONOVI SIMULACIJU !\n\n")
+    return
+   }
 
     return quarterfinals;
   }

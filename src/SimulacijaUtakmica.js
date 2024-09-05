@@ -5,7 +5,7 @@ const teams = Teams1
 function calculateWeightedProbability(rank, form) {
     const rankWeight = 0.7;
     const formWeight = 0.3;
-    const normalizedRank = 1 /(1 + (rank/10)) // reciprocna vrednost
+    const normalizedRank = 1 /(1 + Math.exp((rank - 5) / 2)) // izmenjen kod zbog bolje simulacije
     const weightedProbability = (rankWeight * normalizedRank) + (formWeight * form); // uticaj ranga i forme tima na verovatnocu pobede
     return weightedProbability
 }
